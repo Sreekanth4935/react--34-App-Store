@@ -1,7 +1,12 @@
 import {Component} from 'react'
-import './index.css'
-import TabItem from '../TabItem'
+
 import AppItem from '../AppItem'
+import TabItem from '../TabItem'
+
+import './index.css'
+
+const SEARCH_ICON_URL =
+  'https://assets.ccbp.in/frontend/react-js/app-store/app-store-search-img.png'
 
 const tabsList = [
   {tabId: 'SOCIAL', displayText: 'Social'},
@@ -292,69 +297,77 @@ const appsList = [
   },
 ]
 
-// Write your code here
-
 class AppStore extends Component {
-  state = {activeTabId: tabsList[0].tabId, searchInput: ''}
-
-  tabButtonClicked = activeId => {
-    this.setState({activeTabId: activeId})
+  state = {
+    searchInput: '',
+    activeTabId: tabsList[0].tabId,
   }
 
-  searchedInput = event => {
-    console.log(event.target.value)
+  setActiveTabId = tabId => {
+    this.setState({activeTabId: tabId})
+  }
+
+  onChangeSearchInput = event => {
     this.setState({searchInput: event.target.value})
   }
 
-  searchApps = () => {
+  getActiveTabApps = searchedApps => {
+    const {activeTabId} = this.state
+    const filteredApps = searchedApps.filter(
+      eachSearchedApp => eachSearchedApp.category === activeTabId,
+    )
+
+    return filteredApps
+  }
+
+  getSearchResults = () => {
     const {searchInput} = this.state
-    const searchedListApps = appsList.filter(eachApp =>
+    const searchResults = appsList.filter(eachApp =>
       eachApp.appName.toLowerCase().includes(searchInput.toLowerCase()),
     )
-    return searchedListApps
+
+    return searchResults
   }
 
   render() {
-    const {activeTabId, searchInput} = this.state
-    const newAppList = this.searchApps()
-    console.log(newAppList)
-
-    const filteredList = newAppList.filter(
-      eachApp => eachApp.category === activeTabId,
-    )
+    const {searchInput, activeTabId} = this.state
+    const searchResults = this.getSearchResults()
+    const filteredApps = this.getActiveTabApps(searchResults)
 
     return (
-      <div className="bg-container">
-        <h1 className="heading">App Store</h1>
-        <div className="search-container">
-          <input
-            type="search"
-            placeholder="search"
-            className="search"
-            onChange={this.searchedInput}
-            value={searchInput}
-          />
-          <img
-            className="search-icon-image"
-            src="https://assets.ccbp.in/frontend/react-js/app-store/app-store-search-img.png"
-            alt="search icon"
-          />
-        </div>
-        <ul className="tab-items">
-          {tabsList.map(eachTab => (
-            <TabItem
-              key={eachTab.appId}
-              eachTab={eachTab}
-              tabButtonClicked={this.tabButtonClicked}
-              isActive={eachTab.tabId === activeTabId}
+      <div className="app-container">
+        <div className="app-store">
+          <h1 className="heading">App Store</h1>
+          <div className="search-input-container">
+            <input
+              type="search"
+              placeholder="Search"
+              className="search-input"
+              value={searchInput}
+              onChange={this.onChangeSearchInput}
             />
-          ))}
-        </ul>
-        <ul className="app-items">
-          {filteredList.map(eachApp => (
-            <AppItem key={eachApp.tabId} eachApp={eachApp} />
-          ))}
-        </ul>
+            <img
+              src={SEARCH_ICON_URL}
+              alt="search icon"
+              className="search-icon"
+            />
+          </div>
+          <ul className="tabs-list">
+            {tabsList.map(eachTab => (
+              <TabItem
+                key={eachTab.tabId}
+                tabDetails={eachTab}
+                setActiveTabId={this.setActiveTabId}
+                isActive={activeTabId === eachTab.tabId}
+              />
+            ))}
+          </ul>
+          <ul className="apps-list">
+            {filteredApps.map(eachApp => (
+              <AppItem key={eachApp.appId} appDetails={eachApp} />
+            ))}
+          </ul>
+        </div>
       </div>
     )
   }

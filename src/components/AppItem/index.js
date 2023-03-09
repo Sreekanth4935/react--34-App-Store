@@ -1,14 +1,13 @@
-// Write your code here
 import './index.css'
 
 const AppItem = props => {
-  const {eachApp} = props
-  const {appName, imageUrl, tabId} = eachApp
-  // category appId
+  const {appDetails} = props
+  const {appName, imageUrl} = appDetails
+
   return (
-    <li key={tabId} className="list-items">
-      <img className="image" src={imageUrl} alt={appName} />
-      <p className="heading">{appName}</p>
+    <li className="app-item">
+      <img className="app-image" src={imageUrl} alt={appName} />
+      <p className="app-name">{appName}</p>
     </li>
   )
 }

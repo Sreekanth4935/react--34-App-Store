@@ -1,19 +1,18 @@
-// Write your code here
 import './index.css'
 
 const TabItem = props => {
-  const {eachTab, tabButtonClicked, isActive} = props
-  const {tabId, displayText} = eachTab
+  const {tabDetails, setActiveTabId, isActive} = props
+  const {tabId, displayText} = tabDetails
 
-  const tabClicked = isActive ? 'button active' : 'button'
-
-  const isTabButtonClicked = () => {
-    tabButtonClicked(tabId)
+  const onClickTab = () => {
+    setActiveTabId(tabId)
   }
 
+  const tabBtnClassName = isActive ? 'tab-button active' : 'tab-button'
+
   return (
-    <li>
-      <button className={tabClicked} type="button" onClick={isTabButtonClicked}>
+    <li className="tab-item">
+      <button type="button" onClick={onClickTab} className={tabBtnClassName}>
         {displayText}
       </button>
     </li>
