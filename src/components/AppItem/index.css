@@ -1,0 +1,19 @@
+/* Write your CSS here */
+.list-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  margin: 10px;
+  width: 130px;
+  border-radius: 10px;
+  padding: 10px;
+}
+.image {
+  padding-top: 10px;
+  height: 50px;
+}
+.heading {
+  font-size: 14px;
+}
